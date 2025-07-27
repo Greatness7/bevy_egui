@@ -78,35 +78,10 @@ required-features = ["render"]
 
 [dependencies]
 egui = { version = "0.32", default-features = false }
-bevy_a11y = { version = "0.16.0", optional = true }
-bevy_app = "0.16.0"
-bevy_derive = "0.16.0"
-bevy_ecs = "0.16.0"
-bevy_input = "0.16.0"
-bevy_log = "0.16.0"
-bevy_math = "0.16.0"
-bevy_platform = "0.16.0"
-bevy_reflect = "0.16.0"
-bevy_time = "0.16.0"
-bevy_transform = { version = "0.16.1", optional = true }
-bevy_ui = { version = "0.16.1", optional = true }
-bevy_window = "0.16.0"
-bevy_winit = "0.16.0"
-
-# `open_url` feature
 webbrowser = { version = "1.0.1", optional = true }
-
-# `render` feature
 bytemuck = { version = "1", optional = true }
-bevy_asset = { version = "0.16.0", optional = true }
-bevy_core_pipeline = { version = "0.16.1", optional = true }
-bevy_image = { version = "0.16.0", optional = true }
-bevy_render = { version = "0.16.0", optional = true }
 encase = { version = "0.10", optional = true }
 wgpu-types = { version = "24.0", optional = true }
-
-# `picking` feature
-bevy_picking = { version = "0.16.0", optional = true, features = ["bevy_mesh_picking_backend"] }
 
 # `manage_clipboard` feature
 [target.'cfg(not(any(target_arch = "wasm32", target_os = "android")))'.dependencies]
@@ -115,23 +90,6 @@ thread_local = { version = "1.1.0", optional = true }
 
 [dev-dependencies]
 version-sync = "0.9.5"
-bevy = { version = "0.16.0", default-features = false, features = [
-    "accesskit_unix",
-    "bevy_log",
-    "bevy_asset",
-    "bevy_core_pipeline",
-    "bevy_pbr",
-    "bevy_mesh_picking_backend",
-    "bevy_sprite",
-    "bevy_window",
-    "bevy_winit",
-    "android-game-activity",
-    "png",
-    "std",
-    "tonemapping_luts",
-    "webgl2",
-    "x11",
-] }
 egui = { version = "0.32", default-features = false, features = ["bytemuck"] }
 
 [target.'cfg(not(any(target_os = "android", target_os = "ios", target_arch = "wasm32")))'.dev-dependencies]
@@ -159,3 +117,110 @@ js-sys = "0.3.63"
 wasm-bindgen = "0.2.93"
 wasm-bindgen-futures = "0.4.36"
 crossbeam-channel = "0.5.8"
+
+[dependencies.bevy_app]
+git = "https://github.com/bevyengine/bevy"
+rev = "01eff3ea937535bc7384ff361029129475d98263"
+
+[dependencies.bevy_derive]
+git = "https://github.com/bevyengine/bevy"
+rev = "01eff3ea937535bc7384ff361029129475d98263"
+
+[dependencies.bevy_ecs]
+git = "https://github.com/bevyengine/bevy"
+rev = "01eff3ea937535bc7384ff361029129475d98263"
+
+[dependencies.bevy_input]
+git = "https://github.com/bevyengine/bevy"
+rev = "01eff3ea937535bc7384ff361029129475d98263"
+
+[dependencies.bevy_log]
+git = "https://github.com/bevyengine/bevy"
+rev = "01eff3ea937535bc7384ff361029129475d98263"
+
+[dependencies.bevy_math]
+git = "https://github.com/bevyengine/bevy"
+rev = "01eff3ea937535bc7384ff361029129475d98263"
+
+[dependencies.bevy_platform]
+git = "https://github.com/bevyengine/bevy"
+rev = "01eff3ea937535bc7384ff361029129475d98263"
+
+[dependencies.bevy_reflect]
+git = "https://github.com/bevyengine/bevy"
+rev = "01eff3ea937535bc7384ff361029129475d98263"
+
+[dependencies.bevy_time]
+git = "https://github.com/bevyengine/bevy"
+rev = "01eff3ea937535bc7384ff361029129475d98263"
+
+[dependencies.bevy_window]
+git = "https://github.com/bevyengine/bevy"
+rev = "01eff3ea937535bc7384ff361029129475d98263"
+
+[dependencies.bevy_picking]
+git = "https://github.com/bevyengine/bevy"
+rev = "01eff3ea937535bc7384ff361029129475d98263"
+features = ["bevy_mesh_picking_backend"]
+optional = true
+
+[dependencies.bevy_a11y]
+git = "https://github.com/bevyengine/bevy"
+rev = "01eff3ea937535bc7384ff361029129475d98263"
+optional = true
+
+[dependencies.bevy_transform]
+git = "https://github.com/bevyengine/bevy"
+rev = "01eff3ea937535bc7384ff361029129475d98263"
+optional = true
+
+[dependencies.bevy_ui]
+git = "https://github.com/bevyengine/bevy"
+rev = "01eff3ea937535bc7384ff361029129475d98263"
+optional = true
+
+[dependencies.bevy_winit]
+git = "https://github.com/bevyengine/bevy"
+rev = "01eff3ea937535bc7384ff361029129475d98263"
+
+[dependencies.bevy_asset]
+git = "https://github.com/bevyengine/bevy"
+rev = "01eff3ea937535bc7384ff361029129475d98263"
+optional = true
+
+[dependencies.bevy_core_pipeline]
+git = "https://github.com/bevyengine/bevy"
+rev = "01eff3ea937535bc7384ff361029129475d98263"
+optional = true
+
+[dependencies.bevy_image]
+git = "https://github.com/bevyengine/bevy"
+rev = "01eff3ea937535bc7384ff361029129475d98263"
+optional = true
+
+[dependencies.bevy_render]
+git = "https://github.com/bevyengine/bevy"
+rev = "01eff3ea937535bc7384ff361029129475d98263"
+optional = true
+
+[dev-dependencies.bevy]
+git = "https://github.com/bevyengine/bevy"
+rev = "01eff3ea937535bc7384ff361029129475d98263"
+default-features = false
+features = [
+    "accesskit_unix",
+    "bevy_log",
+    "bevy_asset",
+    "bevy_core_pipeline",
+    "bevy_pbr",
+    "bevy_mesh_picking_backend",
+    "bevy_sprite",
+    "bevy_window",
+    "bevy_winit",
+    "android-game-activity",
+    "png",
+    "std",
+    "tonemapping_luts",
+    "webgl2",
+    "x11",
+]
