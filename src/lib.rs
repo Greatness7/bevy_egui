@@ -146,6 +146,30 @@
 //!
 //! - [`bevy-inspector-egui`](https://github.com/jakobhellermann/bevy-inspector-egui)
 
+macro_rules! get_some {
+    ($query:ident, $entity:expr) => {
+        match $query.get($entity) {
+            Ok(item) => Some(item),
+            Err(::bevy_ecs::query::QueryEntityError::EntityDoesNotExist(_)) => None,
+            err => {
+                err.unwrap();
+                unreachable!()
+            }
+        }
+    };
+}
+macro_rules! get_some_mut {
+    ($query:ident, $entity:expr) => {
+        match $query.get_mut($entity) {
+            Ok(item) => Some(item),
+            Err(::bevy_ecs::query::QueryEntityError::EntityDoesNotExist(_)) => None,
+            err => {
+                err.unwrap();
+                unreachable!()
+            }
+        }
+    };
+}
 /// Helpers for converting Bevy types into Egui ones and vice versa.
 pub mod helpers;
 /// Systems for translating Bevy input events into Egui input.
@@ -1542,8 +1566,6 @@ pub fn capture_pointer_input_system(
     mut output: EventWriter<PointerHits>,
     window_to_egui_context_map: Res<WindowToEguiContextMap>,
 ) {
-    use helpers::QueryHelper;
-
     for (pointer, location) in pointers
         .iter()
         .filter_map(|(i, p)| p.location.as_ref().map(|l| (i, l)))
@@ -1556,7 +1578,7 @@ pub fn capture_pointer_input_system(
                 .unwrap_or_default()
             {
                 let Some((entity, mut ctx, settings, camera)) =
-                    egui_context.get_some_mut(window_context_entity)
+                    get_some_mut!(egui_context, window_context_entity)
                 else {
                     continue;
                 };

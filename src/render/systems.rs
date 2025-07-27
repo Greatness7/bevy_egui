@@ -1,5 +1,4 @@
 use crate::{
-    helpers::QueryHelper,
     render::{
         DrawCommand, DrawPrimitive, EguiBevyPaintCallback, EguiCameraView, EguiDraw, EguiPipeline,
         EguiPipelineKey, EguiViewTarget, PaintCallbackDraw,
@@ -221,7 +220,7 @@ pub fn queue_pipelines_system(
     let pipelines: HashMap<MainEntity, CachedRenderPipelineId> = egui_views
         .iter()
         .filter_map(|egui_camera_view| {
-            let (main_entity, extracted_camera) = camera_views.get_some(egui_camera_view.0)?;
+            let (main_entity, extracted_camera) = get_some!(camera_views, egui_camera_view.0)?;
 
             let pipeline_id = specialized_pipelines.specialize(
                 &pipeline_cache,

@@ -1,8 +1,8 @@
 #[cfg(target_arch = "wasm32")]
 use crate::text_agent::{is_mobile_safari, update_text_agent};
 use crate::{
-    helpers::{vec2_into_egui_pos2, QueryHelper},
-    EguiContext, EguiContextSettings, EguiGlobalSettings, EguiInput, EguiOutput,
+    helpers::vec2_into_egui_pos2, EguiContext, EguiContextSettings, EguiGlobalSettings, EguiInput,
+    EguiOutput,
 };
 use bevy_ecs::{event::EventIterator, prelude::*, system::SystemParam};
 use bevy_input::{
@@ -367,7 +367,7 @@ pub fn write_window_pointer_moved_events_system(
 ) {
     for (event, context) in cursor_moved_reader.read(|event| event.window) {
         let Some((context_settings, mut context_pointer_position)) =
-            egui_contexts.get_some_mut(context)
+            get_some_mut!(egui_contexts, context)
         else {
             continue;
         };
@@ -407,7 +407,7 @@ pub fn write_pointer_button_events_system(
     for (event, context) in
         mouse_button_input_reader.read_with_non_window_hovered(|event| event.window)
     {
-        let Some((context_settings, context_pointer_position)) = egui_contexts.get_some(context)
+        let Some((context_settings, context_pointer_position)) = get_some!(egui_contexts, context)
         else {
             continue;
         };
@@ -476,7 +476,7 @@ pub fn write_non_window_pointer_moved_events_system(
     };
 
     let Some((context_settings, context_pointer_position)) =
-        egui_contexts.get_some(*hovered_non_window_egui_context)
+        get_some!(egui_contexts, *hovered_non_window_egui_context)
     else {
         return;
     };
@@ -509,7 +509,7 @@ pub fn write_mouse_wheel_events_system(
             MouseScrollUnit::Pixel => egui::MouseWheelUnit::Point,
         };
 
-        let Some(context_settings) = egui_contexts.get_some(context) else {
+        let Some(context_settings) = get_some!(egui_contexts, context) else {
             continue;
         };
 
@@ -547,7 +547,7 @@ pub fn write_keyboard_input_events_system(
     let modifiers = modifier_keys_state.to_egui_modifiers();
     for (event, context) in keyboard_input_reader.read_with_non_window_focused(|event| event.window)
     {
-        let Some(context_settings) = egui_contexts.get_some(context) else {
+        let Some(context_settings) = get_some!(egui_contexts, context) else {
             continue;
         };
 
@@ -653,7 +653,7 @@ pub fn write_ime_events_system(
         | Ime::Enabled { window } => *window,
     }) {
         let Some((_entity, context_settings, mut ime_state, _egui_output)) =
-            egui_contexts.get_some_mut(context)
+            get_some_mut!(egui_contexts, context)
         else {
             continue;
         };
@@ -763,7 +763,7 @@ pub fn write_file_dnd_events_system(
         | FileDragAndDrop::HoveredFile { window, .. }
         | FileDragAndDrop::HoveredFileCanceled { window } => *window,
     }) {
-        let Some(context_settings) = egui_contexts.get_some(context) else {
+        let Some(context_settings) = get_some!(egui_contexts, context) else {
             continue;
         };
 
@@ -832,7 +832,7 @@ pub fn write_window_touch_events_system(
             mut context_pointer_position,
             mut context_pointer_touch_id,
             output,
-        )) = egui_contexts.get_some_mut(context)
+        )) = get_some_mut!(egui_contexts, context)
         else {
             continue;
         };
@@ -904,7 +904,7 @@ pub fn write_non_window_touch_events_system(
             context_pointer_position,
             mut context_pointer_touch_id,
             output,
-        )) = egui_contexts.get_some_mut(focused_non_window_egui_context)
+        )) = get_some_mut!(egui_contexts, focused_non_window_egui_context)
         else {
             continue;
         };
@@ -1105,7 +1105,7 @@ pub fn write_egui_input_system(
                 window_to_egui_context_map
                     .context_to_window
                     .get(&entity)
-                    .and_then(|window_entity| windows.get_some(*window_entity))
+                    .and_then(|window_entity| get_some!(windows, *window_entity))
                     .is_some_and(|window| window.focused)
             },
             |context| context.0 == entity,
