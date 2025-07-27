@@ -696,18 +696,16 @@ impl EguiContexts<'_, '_> {
     #[inline]
     pub fn ctx_mut(&mut self) -> Result<&mut egui::Context, QuerySingleError> {
         self.q.iter_mut().fold(
-            Err(QuerySingleError::NoEntities(core::any::type_name::<
-                EguiContextsPrimaryQuery,
-            >())),
+            Err(QuerySingleError::NoEntities(
+                core::any::type_name::<EguiContextsPrimaryQuery>().into(),
+            )),
             |result, (ctx, primary)| match (&result, primary) {
                 (Err(QuerySingleError::MultipleEntities(_)), _) => result,
                 (Err(QuerySingleError::NoEntities(_)), Some(_)) => Ok(ctx.into_inner().get_mut()),
                 (Err(QuerySingleError::NoEntities(_)), None) => result,
-                (Ok(_), Some(_)) => {
-                    Err(QuerySingleError::MultipleEntities(core::any::type_name::<
-                        EguiContextsPrimaryQuery,
-                    >()))
-                }
+                (Ok(_), Some(_)) => Err(QuerySingleError::MultipleEntities(
+                    core::any::type_name::<EguiContextsPrimaryQuery>().into(),
+                )),
                 (Ok(_), None) => result,
             },
         )
