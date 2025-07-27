@@ -220,20 +220,20 @@ git = "https://github.com/bevyengine/bevy"
 rev = "01eff3ea937535bc7384ff361029129475d98263"
 default-features = false
 features = [
-    "zstd_rust",
     "accesskit_unix",
-    "bevy_log",
+    "android-game-activity",
     "bevy_asset",
     "bevy_core_pipeline",
-    "bevy_pbr",
+    "bevy_log",
     "bevy_mesh_picking_backend",
+    "bevy_pbr",
     "bevy_sprite",
     "bevy_window",
     "bevy_winit",
-    "android-game-activity",
     "png",
     "std",
     "tonemapping_luts",
     "webgl2",
     "x11",
+    "zstd_c",
 ]
