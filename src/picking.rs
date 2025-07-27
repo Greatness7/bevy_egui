@@ -96,7 +96,7 @@ pub fn handle_move_system(
     if mesh.primitive_topology() != PrimitiveTopology::TriangleList {
         panic!(
             "Unexpected primitive topology for a picked mesh ({:?}): {:?}",
-            trigger.target,
+            trigger.target(),
             mesh.primitive_topology()
         );
     }
@@ -139,7 +139,7 @@ pub fn handle_over_system(
     pickable_egui_context_query: Query<&PickableEguiContext>,
     mut commands: Commands,
 ) {
-    if let Ok(&PickableEguiContext(context)) = pickable_egui_context_query.get(trigger.target) {
+    if let Ok(&PickableEguiContext(context)) = pickable_egui_context_query.get(trigger.target()) {
         commands.insert_resource(HoveredNonWindowEguiContext(context));
     }
 }
@@ -151,7 +151,7 @@ pub fn handle_out_system(
     mut commands: Commands,
     hovered_non_window_egui_context: Option<Res<HoveredNonWindowEguiContext>>,
 ) {
-    if let Ok(&PickableEguiContext(context)) = pickable_egui_context_query.get(trigger.target) {
+    if let Ok(&PickableEguiContext(context)) = pickable_egui_context_query.get(trigger.target()) {
         if hovered_non_window_egui_context
             .as_deref()
             .is_some_and(|&HoveredNonWindowEguiContext(hovered_context)| hovered_context == context)
