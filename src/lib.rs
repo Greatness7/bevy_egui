@@ -191,7 +191,7 @@ use bevy_ecs::{
 };
 #[cfg(feature = "render")]
 use bevy_image::{Image, ImageSampler};
-use bevy_input::InputSystem;
+use bevy_input::InputSystems;
 #[allow(unused_imports)]
 use bevy_log as log;
 #[cfg(feature = "picking")]
@@ -968,7 +968,7 @@ impl Plugin for EguiPlugin {
             PreUpdate,
             (
                 EguiPreUpdateSet::InitContexts,
-                EguiPreUpdateSet::ProcessInput.after(InputSystem),
+                EguiPreUpdateSet::ProcessInput.after(InputSystems),
                 EguiPreUpdateSet::BeginPass,
             )
                 .chain(),
