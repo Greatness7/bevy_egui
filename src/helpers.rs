@@ -242,18 +242,18 @@ pub fn egui_rect_into_rect(rect: egui::Rect) -> bevy_math::Rect {
     }
 }
 
-pub(crate) trait QueryHelper<'w> {
+pub(crate) trait QueryHelper<'s> {
     type QueryData: bevy_ecs::query::QueryData;
 
-    fn get_some(&self, entity: Entity) -> Option<ROQueryItem<'_, Self::QueryData>>;
+    fn get_some(&self, entity: Entity) -> Option<ROQueryItem<'_, 's, Self::QueryData>>;
 
-    fn get_some_mut(&mut self, entity: Entity) -> Option<QueryItem<'_, Self::QueryData>>;
+    fn get_some_mut(&mut self, entity: Entity) -> Option<QueryItem<'_, 's, Self::QueryData>>;
 }
 
-impl<'w, D: QueryData, F: QueryFilter> QueryHelper<'w> for Query<'w, '_, D, F> {
+impl<'s, D: QueryData, F: QueryFilter> QueryHelper<'s> for Query<'_, 's, D, F> {
     type QueryData = D;
 
-    fn get_some(&self, entity: Entity) -> Option<ROQueryItem<'_, Self::QueryData>> {
+    fn get_some(&self, entity: Entity) -> Option<ROQueryItem<'_, 's, Self::QueryData>> {
         match self.get(entity) {
             Ok(item) => Some(item),
             Err(QueryEntityError::EntityDoesNotExist(_)) => None,
@@ -264,7 +264,7 @@ impl<'w, D: QueryData, F: QueryFilter> QueryHelper<'w> for Query<'w, '_, D, F> {
         }
     }
 
-    fn get_some_mut(&mut self, entity: Entity) -> Option<QueryItem<'_, Self::QueryData>> {
+    fn get_some_mut(&mut self, entity: Entity) -> Option<QueryItem<'_, 's, Self::QueryData>> {
         match self.get_mut(entity) {
             Ok(item) => Some(item),
             Err(QueryEntityError::EntityDoesNotExist(_)) => None,
