@@ -1,5 +1,5 @@
 #![warn(missing_docs)]
-#![allow(clippy::type_complexity)]
+#![allow(deprecated, clippy::type_complexity)]
 
 //! This crate provides an [Egui](https://github.com/emilk/egui) integration for the [Bevy](https://github.com/bevyengine/bevy) game engine.
 //!
