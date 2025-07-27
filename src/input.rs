@@ -39,7 +39,7 @@ pub struct EguiContextImeState {
     pub is_ime_allowed: bool,
 }
 
-#[derive(Event)]
+#[derive(Event, BufferedEvent)]
 /// Wraps Egui events emitted by [`crate::EguiInputSet`] systems.
 pub struct EguiInputEvent {
     /// Context to pass an event to.
@@ -48,7 +48,7 @@ pub struct EguiInputEvent {
     pub event: egui::Event,
 }
 
-#[derive(Event)]
+#[derive(Event, BufferedEvent)]
 /// Wraps [`bevy::FileDragAndDrop`](bevy_window::FileDragAndDrop) events emitted by [`crate::EguiInputSet`] systems.
 pub struct EguiFileDragAndDropEvent {
     /// Context to pass an event to.
@@ -206,7 +206,7 @@ impl WindowToEguiContextMap {
 }
 
 /// Iterates over pairs of `(Event, Entity)`, where the entity points to the context that the event is related to.
-pub struct EguiContextsEventIterator<'a, E: Event, F> {
+pub struct EguiContextsEventIterator<'a, E: BufferedEvent, F> {
     event_iter: EventIterator<'a, E>,
     map_event_to_window_id_f: F,
     current_event: Option<&'a E>,
@@ -215,7 +215,9 @@ pub struct EguiContextsEventIterator<'a, E: Event, F> {
     map: &'a WindowToEguiContextMap,
 }
 
-impl<'a, E: Event, F: FnMut(&'a E) -> Entity> Iterator for EguiContextsEventIterator<'a, E, F> {
+impl<'a, E: BufferedEvent, F: FnMut(&'a E) -> Entity> Iterator
+    for EguiContextsEventIterator<'a, E, F>
+{
     type Item = (&'a E, Entity);
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -247,14 +249,14 @@ impl<'a, E: Event, F: FnMut(&'a E) -> Entity> Iterator for EguiContextsEventIter
 
 #[derive(SystemParam)]
 /// A helper system param to iterate over pairs of events and Egui contexts, see [`EguiContextsEventIterator`].
-pub struct EguiContextEventReader<'w, 's, E: Event> {
+pub struct EguiContextEventReader<'w, 's, E: BufferedEvent> {
     event_reader: EventReader<'w, 's, E>,
     map: Res<'w, WindowToEguiContextMap>,
     hovered_non_window_egui_context: Option<Res<'w, HoveredNonWindowEguiContext>>,
     focused_non_window_egui_context: Option<Res<'w, FocusedNonWindowEguiContext>>,
 }
 
-impl<'w, 's, E: Event> EguiContextEventReader<'w, 's, E> {
+impl<'w, 's, E: BufferedEvent> EguiContextEventReader<'w, 's, E> {
     /// Returns [`EguiContextsEventIterator`] that iterates only over window events (i.e. skips contexts that render to images, etc.),
     /// expects a lambda that extracts a window id from an event.
     pub fn read<'a, F>(
@@ -263,7 +265,7 @@ impl<'w, 's, E: Event> EguiContextEventReader<'w, 's, E> {
     ) -> EguiContextsEventIterator<'a, E, F>
     where
         F: FnMut(&'a E) -> Entity,
-        E: Event,
+        E: BufferedEvent,
     {
         EguiContextsEventIterator {
             event_iter: self.event_reader.read(),
@@ -282,7 +284,7 @@ impl<'w, 's, E: Event> EguiContextEventReader<'w, 's, E> {
     ) -> EguiContextsEventIterator<'a, E, F>
     where
         F: FnMut(&'a E) -> Entity,
-        E: Event,
+        E: BufferedEvent,
     {
         EguiContextsEventIterator {
             event_iter: self.event_reader.read(),

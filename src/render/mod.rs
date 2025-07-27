@@ -25,6 +25,7 @@ use bevy_asset::{weak_handle, Handle, RenderAssetUsages};
 use bevy_ecs::{
     component::Component,
     entity::Entity,
+    query::Has,
     resource::Resource,
     system::{Commands, Local, ResMut},
     world::{FromWorld, World},
@@ -47,7 +48,7 @@ use bevy_render::{
     },
     renderer::{RenderContext, RenderDevice},
     sync_world::{RenderEntity, TemporaryRenderEntity},
-    view::{ExtractedView, RetainedViewEntity, ViewTarget},
+    view::{ExtractedView, Hdr, RetainedViewEntity, ViewTarget},
     MainWorld,
 };
 use egui::{TextureFilter, TextureOptions};
@@ -126,11 +127,12 @@ pub fn extract_egui_camera_view_system(
         Entity,
         RenderEntity,
         &Camera,
+        Has<Hdr>,
         &mut EguiRenderOutput,
         &EguiContextSettings,
     )>();
 
-    for (main_entity, render_entity, camera, mut egui_render_output, settings) in
+    for (main_entity, render_entity, camera, hdr, mut egui_render_output, settings) in
         &mut q.iter_mut(&mut world)
     {
         // Move Egui shapes and textures out of the main world into the render one.
@@ -175,7 +177,7 @@ pub fn extract_egui_camera_view_system(
                             UI_CAMERA_FAR + UI_CAMERA_TRANSFORM_OFFSET,
                         ),
                         clip_from_world: None,
-                        hdr: camera.hdr,
+                        hdr,
                         viewport: UVec4::from((
                             physical_viewport_rect.min,
                             physical_viewport_rect.size(),
